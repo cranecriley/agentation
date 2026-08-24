@@ -20,7 +20,14 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconLayout,
+  IconLayers,
 } from "../icons";
+import {
+  MockOverlay,
+  resolveMockUrl,
+  useCurrentPathname,
+  type MockupsConfig,
+} from "../mock-overlay";
 import { HelpTooltip } from "../help-tooltip";
 import { DesignMode } from "../design-mode";
 import { DesignPalette } from "../design-mode/palette";
@@ -313,6 +320,8 @@ export type PageFeedbackToolbarCSSProps = {
   webhookUrl?: string;
   /** Custom class name applied to the toolbar container. Use to adjust positioning or z-index. */
   className?: string;
+  /** Design mockups to overlay on the live page, keyed by pathname. */
+  mockups?: MockupsConfig;
 };
 
 /** Alias for PageFeedbackToolbarCSSProps */
@@ -338,6 +347,7 @@ export function PageFeedbackToolbarCSS({
   onSessionCreated,
   webhookUrl,
   className: userClassName,
+  mockups,
 }: PageFeedbackToolbarCSSProps = {}) {
   const [isActive, setIsActive] = useState(false);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
@@ -433,6 +443,13 @@ export function PageFeedbackToolbarCSS({
     "main",
   );
   const [tooltipsHidden, setTooltipsHidden] = useState(false);
+
+  // Mock overlay state
+  const currentPathname = useCurrentPathname();
+  const currentMockUrl = resolveMockUrl(mockups, currentPathname);
+  const [mockOverlayOn, setMockOverlayOn] = useState(false);
+  const [mockOpacity, setMockOpacity] = useState(mockups?.defaultOpacity ?? 0.5);
+  const [mockFitWidth, setMockFitWidth] = useState(true);
 
   // Layout mode state
   const [isDesignMode, setIsDesignMode] = useState(false);
@@ -3696,6 +3713,30 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
               </span>
             </div>
 
+            {mockups && (
+              <div className={styles.buttonWrapper}>
+                <button
+                  className={styles.controlButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    hideTooltipsUntilMouseLeave();
+                    setMockOverlayOn((prev) => !prev);
+                  }}
+                  disabled={!currentMockUrl}
+                  data-active={mockOverlayOn && !!currentMockUrl}
+                >
+                  <IconLayers size={22} />
+                </button>
+                <span className={styles.buttonTooltip}>
+                  {!currentMockUrl
+                    ? "No mock for this page"
+                    : mockOverlayOn
+                      ? "Hide mock overlay"
+                      : "Mock overlay"}
+                </span>
+              </div>
+            )}
+
             <div className={styles.buttonWrapper}>
               <button
                 className={styles.controlButton}
@@ -4700,6 +4741,17 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
             </>
           )}
         </div>
+      )}
+
+      {mockOverlayOn && currentMockUrl && (
+        <MockOverlay
+          url={currentMockUrl}
+          opacity={mockOpacity}
+          onOpacityChange={setMockOpacity}
+          fitWidth={mockFitWidth}
+          onFitWidthChange={setMockFitWidth}
+          onClose={() => setMockOverlayOn(false)}
+        />
       )}
     </div>,
     document.body,

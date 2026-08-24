@@ -24,6 +24,10 @@ export type {
   AnnotationPopupCSSHandle,
 } from "./components/annotation-popup-css";
 
+// Mock overlay (design mockup over live page)
+export { MockOverlay, resolveMockUrl, useCurrentPathname } from "./components/mock-overlay";
+export type { MockupsConfig, MockupRoutes } from "./components/mock-overlay";
+
 // Icons (same for both versions - they're pure SVG)
 export * from "./components/icons";
 
