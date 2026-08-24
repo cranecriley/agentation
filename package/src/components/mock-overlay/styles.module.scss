@@ -1,0 +1,90 @@
+// Mock overlay layer — absolute so it scrolls with the document, and just
+// below the toolbar's z-index (100000) so controls stay clickable above it.
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99990;
+  pointer-events: none;
+  text-align: center;
+}
+
+.overlayImage {
+  display: block;
+  margin: 0 auto;
+  max-width: none;
+}
+
+// Floating control panel, bottom-center.
+.panel {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100002;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(24, 24, 24, 0.92);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.panelLabel {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+.panelError {
+  color: #f87171;
+}
+
+.panelSlider {
+  width: 140px;
+  accent-color: var(--agentation-color-accent, #3b82f6);
+}
+
+.panelValue {
+  min-width: 34px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.panelToggle {
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+
+  &[data-active="true"] {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.panelClose {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+
+  &:hover {
+    color: #fff;
+  }
+}
