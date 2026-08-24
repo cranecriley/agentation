@@ -1096,3 +1096,22 @@ export const IconLayers = ({ size = 24 }: { size?: number }) => (
     />
   </svg>
 );
+
+export const IconDice = ({ size = 24 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect
+      x="3"
+      y="3"
+      width="18"
+      height="18"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    />
+    <circle cx="8.5" cy="8.5" r="1.4" fill="currentColor" />
+    <circle cx="15.5" cy="8.5" r="1.4" fill="currentColor" />
+    <circle cx="12" cy="12" r="1.4" fill="currentColor" />
+    <circle cx="8.5" cy="15.5" r="1.4" fill="currentColor" />
+    <circle cx="15.5" cy="15.5" r="1.4" fill="currentColor" />
+  </svg>
+);

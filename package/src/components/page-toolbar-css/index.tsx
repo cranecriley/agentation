@@ -21,6 +21,7 @@ import {
   IconChevronRight,
   IconLayout,
   IconLayers,
+  IconDice,
 } from "../icons";
 import {
   MockOverlay,
@@ -28,6 +29,7 @@ import {
   useCurrentPathname,
   type MockupsConfig,
 } from "../mock-overlay";
+import { RerollPanel, type RerollConfig, type RerollRecipe } from "../reroll";
 import { HelpTooltip } from "../help-tooltip";
 import { DesignMode } from "../design-mode";
 import { DesignPalette } from "../design-mode/palette";
@@ -322,6 +324,10 @@ export type PageFeedbackToolbarCSSProps = {
   className?: string;
   /** Design mockups to overlay on the live page, keyed by pathname. */
   mockups?: MockupsConfig;
+  /** Enable the design-token re-roll panel. Pass a config to customize prefixes. */
+  reroll?: boolean | RerollConfig;
+  /** Called when the user keeps/copies a re-roll recipe. */
+  onRerollKeep?: (recipe: RerollRecipe) => void;
 };
 
 /** Alias for PageFeedbackToolbarCSSProps */
@@ -348,6 +354,8 @@ export function PageFeedbackToolbarCSS({
   webhookUrl,
   className: userClassName,
   mockups,
+  reroll,
+  onRerollKeep,
 }: PageFeedbackToolbarCSSProps = {}) {
   const [isActive, setIsActive] = useState(false);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
@@ -450,6 +458,9 @@ export function PageFeedbackToolbarCSS({
   const [mockOverlayOn, setMockOverlayOn] = useState(false);
   const [mockOpacity, setMockOpacity] = useState(mockups?.defaultOpacity ?? 0.5);
   const [mockFitWidth, setMockFitWidth] = useState(true);
+
+  // Token re-roll state
+  const [rerollOn, setRerollOn] = useState(false);
 
   // Layout mode state
   const [isDesignMode, setIsDesignMode] = useState(false);
@@ -3737,6 +3748,25 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
               </div>
             )}
 
+            {reroll && (
+              <div className={styles.buttonWrapper}>
+                <button
+                  className={styles.controlButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    hideTooltipsUntilMouseLeave();
+                    setRerollOn((prev) => !prev);
+                  }}
+                  data-active={rerollOn}
+                >
+                  <IconDice size={22} />
+                </button>
+                <span className={styles.buttonTooltip}>
+                  {rerollOn ? "Close re-roll" : "Re-roll tokens"}
+                </span>
+              </div>
+            )}
+
             <div className={styles.buttonWrapper}>
               <button
                 className={styles.controlButton}
@@ -4751,6 +4781,14 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
           fitWidth={mockFitWidth}
           onFitWidthChange={setMockFitWidth}
           onClose={() => setMockOverlayOn(false)}
+        />
+      )}
+
+      {rerollOn && reroll && (
+        <RerollPanel
+          config={typeof reroll === "object" ? reroll : undefined}
+          onClose={() => setRerollOn(false)}
+          onKeep={onRerollKeep}
         />
       )}
     </div>,

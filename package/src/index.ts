@@ -28,6 +28,10 @@ export type {
 export { MockOverlay, resolveMockUrl, useCurrentPathname } from "./components/mock-overlay";
 export type { MockupsConfig, MockupRoutes } from "./components/mock-overlay";
 
+// Token re-roll (live design-token exploration)
+export { RerollPanel, randomRecipe, describeRecipe, applyRecipe, clearOverrides, collectRootTokens, parseColor, parseSimpleColor, applyRecipeToColor, hslaToCss } from "./components/reroll";
+export type { RerollConfig, RerollRecipe } from "./components/reroll";
+
 // Icons (same for both versions - they're pure SVG)
 export * from "./components/icons";
 
