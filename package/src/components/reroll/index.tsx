@@ -251,7 +251,7 @@ export function RerollPanel({ config, onClose, onKeep }: RerollPanelProps) {
   if (typeof document === "undefined") return null;
 
   return createPortal(
-    <div className={styles.panel} data-agentation-reroll-panel>
+    <div className={styles.panel} data-agentation-reroll-panel data-agentation-ui>
       <span className={styles.label}>Re-roll</span>
       <button className={styles.roll} onClick={reroll}>
         {recipe ? "Roll again" : "Roll"}

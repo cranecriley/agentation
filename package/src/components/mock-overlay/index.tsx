@@ -135,7 +135,7 @@ export function MockOverlay({
           />
         </div>
       )}
-      <div className={styles.panel} data-agentation-mock-panel>
+      <div className={styles.panel} data-agentation-mock-panel data-agentation-ui>
         <span className={styles.panelLabel}>Mock</span>
         {failed ? (
           <span className={styles.panelError}>image failed to load</span>

@@ -1870,7 +1870,10 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
     const handleMouseMove = (e: MouseEvent) => {
       // Use composedPath to get actual target inside shadow DOM
       const target = (e.composedPath()[0] || e.target) as HTMLElement;
-      if (closestCrossingShadow(target, "[data-feedback-toolbar]")) {
+      if (
+        closestCrossingShadow(target, "[data-feedback-toolbar]") ||
+        closestCrossingShadow(target, "[data-agentation-ui]")
+      ) {
         setHoverInfo(null);
         return;
       }
@@ -1967,6 +1970,7 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
       if (closestCrossingShadow(target, "[data-feedback-toolbar]")) return;
       if (closestCrossingShadow(target, "[data-annotation-popup]")) return;
       if (closestCrossingShadow(target, "[data-annotation-marker]")) return;
+      if (closestCrossingShadow(target, "[data-agentation-ui]")) return;
 
       // Handle cmd+shift+click for multi-element selection
       if (e.metaKey && e.shiftKey && !pendingAnnotation && !editingAnnotation) {
@@ -2161,6 +2165,7 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
       if (closestCrossingShadow(target, "[data-feedback-toolbar]")) return;
       if (closestCrossingShadow(target, "[data-annotation-marker]")) return;
       if (closestCrossingShadow(target, "[data-annotation-popup]")) return;
+      if (closestCrossingShadow(target, "[data-agentation-ui]")) return;
 
       // Don't start drag on text elements - allow native text selection
       const textTags = new Set([
