@@ -59,7 +59,11 @@ function patchHistory() {
     const original = window.history[method].bind(window.history);
     window.history[method] = (...args: Parameters<History["pushState"]>) => {
       const result = original(...args);
-      window.dispatchEvent(new Event(NAVIGATION_EVENT));
+      // Deferred: frameworks call pushState from inside React's commit phase,
+      // and a synchronous dispatch makes useCurrentPathname's setState fire
+      // there too — React 19 rejects that ("useInsertionEffect must not
+      // schedule updates"). A microtask lands after the commit completes.
+      queueMicrotask(() => window.dispatchEvent(new Event(NAVIGATION_EVENT)));
       return result;
     };
   }
